@@ -1,9 +1,18 @@
 <?php
 /**
  * Plugin Name: Title Toggler
- * Description: Provides a toggle switch to display post titles derived from post slugs
- * Version: 1.0.0
+ * Plugin URI: https://github.com/ironprogrammer/mu-plugins/tree/main/title-toggler
+ * Description: Renders a toggle switch to display post titles derived from post slugs.
  * Author: Brian Alexander
+ * Author URI: https://brianalexander.com
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Version: 1.0.0
+ *
+ * Shortcode usage:
+ *   [title_toggler] <== just the basics
+ *   [title_toggler label_original="original" label_slug="slug"] <== custom input labels
+ *   [title_toggler title="toggle between title styles"] <== custom hover title
  */
 
 // Prevent direct access

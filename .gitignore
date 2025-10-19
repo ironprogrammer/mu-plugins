@@ -1,0 +1,17 @@
+# Claude Code settings
+.claude/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

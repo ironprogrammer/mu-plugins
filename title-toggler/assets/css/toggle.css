@@ -1,0 +1,151 @@
+/**
+ * Title Toggler - Styles
+ * Designed to match the Clairevoyant theme aesthetic
+ */
+
+.tt-toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.tt-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.tt-label-text {
+    font-family: var(--wp--preset--font-family--platypi, serif);
+    font-size: 1.13rem;
+    font-weight: 700;
+    text-transform: lowercase;
+    color: var(--wp--preset--color--primary, #646464);
+    transition: color 0.3s ease;
+}
+
+/* Active state for labels */
+.tt-toggle-input:not(:checked) ~ .tt-label-original,
+.tt-toggle-input:checked ~ .tt-label-slug {
+    color: var(--wp--preset--color--contrast, #000000);
+}
+
+/* Hide the default checkbox */
+.tt-toggle-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Toggle slider track */
+.tt-toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 41px;
+    height: 20px;
+    background-color: var(--wp--preset--color--tertiary, #eaeaea);
+    border: 4px solid var(--wp--preset--color--contrast, #000000);
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Toggle slider thumb */
+.tt-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 1px;
+    top: 1px;
+    background-color: var(--wp--preset--color--contrast, #000000);
+    border-radius: 0.125rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Checked state - change slider background to purple */
+.tt-toggle-input:checked ~ .tt-toggle-slider {
+    background-color: var(--wp--preset--color--secondary, #5538fd);
+    border-color: var(--wp--preset--color--secondary, #5538fd);
+}
+
+/* Checked state - slider thumb moves right and changes to light color */
+.tt-toggle-input:checked ~ .tt-toggle-slider::before {
+    transform: translateX(21px);
+    background-color: var(--wp--preset--color--base, #ededed);
+}
+
+/* Focus styles for accessibility - use browser default */
+.tt-toggle-input:focus-visible ~ .tt-toggle-slider {
+    outline: auto;
+}
+
+/* Hover effect */
+.tt-toggle-label:hover .tt-toggle-slider {
+    border-color: var(--wp--preset--color--primary, #646464);
+}
+
+.tt-toggle-label:hover .tt-toggle-input:checked ~ .tt-toggle-slider {
+    opacity: 0.9;
+}
+
+/* Glitch effect for post titles (links and headings) */
+:is(a, h1, h2, h3).tt-glitching {
+    position: relative;
+    display: inline-block;
+    animation: tt-glitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes tt-glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-3px, 2px);
+        text-shadow: 3px 0 var(--wp--preset--color--secondary, #5538fd), -3px 0 #ff0000;
+    }
+    40% {
+        transform: translate(-3px, -2px);
+        text-shadow: -3px 0 var(--wp--preset--color--secondary, #5538fd), 3px 0 #00ff00;
+    }
+    60% {
+        transform: translate(3px, 2px);
+        text-shadow: 3px 0 #ff0000, -3px 0 var(--wp--preset--color--secondary, #5538fd);
+    }
+    80% {
+        transform: translate(3px, -2px);
+        text-shadow: -3px 0 #00ff00, 3px 0 #ff0000;
+    }
+    100% {
+        transform: translate(0);
+        text-shadow: none;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .tt-toggle-label {
+        gap: 0.75rem;
+    }
+
+    .tt-label-text {
+        font-size: 1rem;
+    }
+
+    .tt-toggle-slider {
+        width: 35px;
+        height: 18px;
+    }
+
+    .tt-toggle-slider::before {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tt-toggle-input:checked ~ .tt-toggle-slider::before {
+        transform: translateX(17px);
+    }
+}

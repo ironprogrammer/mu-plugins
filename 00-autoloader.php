@@ -27,6 +27,21 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Simple class to track loaded mu-plugins.
+ */
+class MU_Plugins_Autoloader {
+    private static $loaded_plugins = array();
+
+    public static function add_loaded_plugin( $path ) {
+        self::$loaded_plugins[] = $path;
+    }
+
+    public static function get_loaded_plugins() {
+        return self::$loaded_plugins;
+    }
+}
+
 $mu_plugins_dir = __DIR__;
 $subdirs = glob( $mu_plugins_dir . '/*', GLOB_ONLYDIR );
 
@@ -36,5 +51,63 @@ foreach ( $subdirs as $subdir ) {
 
     if ( file_exists( $plugin_file ) ) {
         require_once $plugin_file;
+        MU_Plugins_Autoloader::add_loaded_plugin( $plugin_file );
     }
 }
+
+/**
+ * Append loaded mu-plugins to the autoloader's description.
+ *
+ * Modifies the description directly via JavaScript injection.
+ */
+function mu_plugins_autoloader_append_description() {
+    // Only proceed if we're on the mustuse plugins page.
+    $screen = get_current_screen();
+    if ( ! $screen || 'plugins' !== $screen->id || ! isset( $_REQUEST['plugin_status'] ) || 'mustuse' !== $_REQUEST['plugin_status'] ) {
+        return;
+    }
+
+    $loaded_plugins = MU_Plugins_Autoloader::get_loaded_plugins();
+
+    if ( empty( $loaded_plugins ) ) {
+        return;
+    }
+
+    // Build list of plugin names.
+    $loaded_names = array();
+    foreach ( $loaded_plugins as $plugin_path ) {
+        if ( ! function_exists( 'get_plugin_data' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $plugin_data = get_plugin_data( $plugin_path, false, false );
+
+        // Use Name header if available, otherwise fall back to file basename.
+        if ( ! empty( $plugin_data['Name'] ) ) {
+            $loaded_names[] = $plugin_data['Name'];
+        } else {
+            $loaded_names[] = basename( $plugin_path, '.php' );
+        }
+    }
+
+    if ( empty( $loaded_names ) ) {
+        return;
+    }
+
+    // Output JavaScript to append the loads list to the description.
+    $loads_html = '<p><strong>Loaded:</strong> ' . esc_html( implode( ', ', $loaded_names ) ) . '</p>';
+    ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var autoloaderRow = document.querySelector('tr[data-plugin="00-autoloader.php"]');
+        if (autoloaderRow) {
+            var descriptionDiv = autoloaderRow.querySelector('.plugin-description');
+            if (descriptionDiv) {
+                descriptionDiv.insertAdjacentHTML('beforeend', <?php echo wp_json_encode( $loads_html ); ?>);
+            }
+        }
+    });
+    </script>
+    <?php
+}
+add_action( 'admin_footer-plugins.php', 'mu_plugins_autoloader_append_description' );

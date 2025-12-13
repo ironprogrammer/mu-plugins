@@ -42,7 +42,7 @@ class MU_Plugins_Autoloader {
     }
 }
 
-$mu_plugins_dir = __DIR__;
+$mu_plugins_dir = WPMU_PLUGIN_DIR;
 $subdirs = glob( $mu_plugins_dir . '/*', GLOB_ONLYDIR );
 
 foreach ( $subdirs as $subdir ) {

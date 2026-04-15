@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ironprogrammer/antispambot",
+	"version": "1.0.0",
+	"title": "Antispambot",
+	"category": "text",
+	"icon": "email",
+	"description": "A paragraph that obfuscates email addresses on the frontend.",
+	"postTypes": [ "wp_template", "wp_template_part" ],
+	"attributes": {
+		"content": {
+			"type": "string",
+			"default": "",
+			"__experimentalRole": "content"
+		}
+	},
+	"supports": {
+		"html": false,
+		"color": {
+			"background": true,
+			"text": true
+		},
+		"typography": {
+			"fontSize": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"editorScript": "antispambot-block-editor",
+	"render": "file:./render.php",
+	"textdomain": "antispambot-block"
+}
